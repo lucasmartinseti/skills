@@ -1,6 +1,6 @@
 # skills
 
-Skills para agentes de IA. Instale via [npx skills](https://github.com/vercel-labs/skills).
+Skills para agentes de IA. Instale via [npx skills CLI](https://www.npmjs.com/package/skills).
 
 ## Skills disponíveis
 
@@ -11,18 +11,14 @@ Skills para agentes de IA. Instale via [npx skills](https://github.com/vercel-la
 ## Instalação
 
 ```bash
-# Do registry (após publicação)
-skills add bitbucket-cli
-
-# Do GitHub diretamente
-skills add https://github.com/lucasmartinseti/skills/tree/main/bitbucket-cli
+npx skills add lucasmartinseti/skills -a universal -g
 ```
 
 ## Skills
 
 ### bitbucket-cli
 
-Skill para o [`bb` CLI](https://github.com/gildas/bitbucket-cli) — a CLI não-oficial do Bitbucket Cloud.
+Skill para o [`bb` Bitbucket-cli](https://github.com/gildas/bitbucket-cli) — a CLI não-oficial do Bitbucket Cloud.
 
 Cobre:
 - Autenticação (perfis OAuth, API Token, Access Token)
@@ -30,3 +26,13 @@ Cobre:
 - Repositórios (clone, criar, deletar, fork)
 - Pipelines (trigger, steps, logs)
 - Issues, Artifacts, SSH/GPG Keys, Cache, Completion
+
+#### Instalação
+
+```bash
+npx skills add lucasmartinseti/skills --skill bitbucket-cli -a universal -g
+```
+
+---
+
+Obrigado @gildas por disponibilizar [bitbucket-cli](https://github.com/gildas/bitbucket-cli)
