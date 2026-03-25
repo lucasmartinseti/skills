@@ -1,9 +1,6 @@
 ---
 name: bitbucket-cli
 description: Use the `bb` CLI to interact with Bitbucket Cloud — managing pull requests, repositories, pipelines, issues, workspaces, projects, artifacts, and SSH/GPG keys from the command line. Trigger this skill whenever the user wants to interact with Bitbucket via the `bb` command, asks how to create/merge/approve/decline pull requests, clone or manage repos, trigger or inspect pipelines, manage issues, or set up Bitbucket authentication profiles. Also trigger when the user mentions bitbucket-cli, bb CLI, or wants to automate Bitbucket operations.
-metadata:
-  author: lucasmartinseti
-  version: "1.0.0"
 ---
 
 # Bitbucket CLI (`bb`) Skill

@@ -1,0 +1,14 @@
+{
+  "name": "bitbucket-cli",
+  "version": "1.0.0",
+  "description": "Use the `bb` CLI to interact with Bitbucket Cloud — managing pull requests, repositories, pipelines, issues, workspaces, projects, artifacts, and SSH/GPG keys from the command line.",
+  "author": {
+    "name": "lucasmartinseti",
+    "github": "lucasmartinseti"
+  },
+  "verticals": ["engineering", "operations"],
+  "tags": ["bitbucket", "git", "cli", "devops", "pull-requests", "pipelines"],
+  "scripts": {
+    "setup": "setup.sh"
+  }
+}

@@ -1,4 +1,4 @@
-# skill-bb-cli
+# skills
 
 Skills para agentes de IA. Instale via [npx skills](https://github.com/vercel-labs/skills).
 
