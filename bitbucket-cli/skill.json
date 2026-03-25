@@ -7,8 +7,5 @@
     "github": "lucasmartinseti"
   },
   "verticals": ["engineering", "operations"],
-  "tags": ["bitbucket", "git", "cli", "devops", "pull-requests", "pipelines"],
-  "scripts": {
-    "setup": "setup.sh"
-  }
+  "tags": ["bitbucket", "git", "cli", "devops", "pull-requests", "pipelines"]
 }

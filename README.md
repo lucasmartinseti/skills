@@ -11,7 +11,11 @@ Skills para agentes de IA. Instale via [npx skills](https://github.com/vercel-la
 ## Instalação
 
 ```bash
-npx skills add lucasmartinseti/skill-bb-cli
+# Do registry (após publicação)
+skills add bitbucket-cli
+
+# Do GitHub diretamente
+skills add https://github.com/lucasmartinseti/skills/tree/main/bitbucket-cli
 ```
 
 ## Skills
