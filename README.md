@@ -33,6 +33,4 @@ Cobre:
 npx skills add lucasmartinseti/skills --skill bitbucket-cli -a universal -g
 ```
 
----
-
-Obrigado @gildas por disponibilizar [bitbucket-cli](https://github.com/gildas/bitbucket-cli)
+Obrigado [@gildas](https://github.com/gildas) por disponibilizar [bitbucket-cli](https://github.com/gildas/bitbucket-cli)
