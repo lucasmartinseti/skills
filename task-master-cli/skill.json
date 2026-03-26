@@ -1,0 +1,11 @@
+{
+  "name": "task-master-cli",
+  "version": "1.0.0",
+  "description": "Use the `task-master` CLI to manage tasks in software projects — creating, listing, updating, and tracking tasks and subtasks from the command line.",
+  "author": {
+    "name": "lucasmartinseti",
+    "github": "lucasmartinseti"
+  },
+  "verticals": ["engineering", "operations"],
+  "tags": ["task-master", "tasks", "cli", "project-management", "ai-driven-development"]
+}
