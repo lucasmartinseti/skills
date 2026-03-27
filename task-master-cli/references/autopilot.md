@@ -84,11 +84,11 @@ Inicializa um novo workflow TDD para uma task.
 **Options:**
 - `--max-attempts <number>`: Máximo de tentativas por subtask (default: 3)
 - `--force`: Forçar início mesmo se workflow já existe
-- `--project-root <path>`: Diretório raiz do projeto
+- `--project-root <path>`: Diretório raiz do projeto **Sempre usar esse parametro.**
 - `--json`: Output JSON
 
 ```bash
-tm autopilot start 7 --max-attempts 5 --json
+tm autopilot start 7 --project-root <path> --max-attempts 5 --json
 ```
 
 **JSON Output:**
