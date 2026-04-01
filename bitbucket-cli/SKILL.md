@@ -29,6 +29,7 @@ Environment variables: `BB_OUTPUT_FORMAT`, `BB_PROFILE`, `BB_CONFIG`.
 ## Authentication Profiles
 
 Profiles store credentials. **Set up a profile before any other command.**
+For most personal and day-to-day usage, prefer an API Token profile because it is the simplest setup path.
 
 ### Create a profile
 
@@ -58,6 +59,8 @@ bb profile create \
   --user your@email.com \
   --password <api-token>
 ```
+
+Use the Atlassian account email in `--user` and the Bitbucket Cloud API Token in `--password`.
 
 **Access Token (repo/project/workspace token):**
 ```bash
@@ -120,6 +123,17 @@ bb repo clone --protocol ssh myrepository   # uses default workspace
 bb pipeline trigger --branch main
 bb pipeline trigger --branch main --variable KEY=VALUE
 ```
+
+### List repositories from a project
+```bash
+bb repo list \
+  --profile omd \
+  --workspace equipeomd \
+  --project-key DEVOPS \
+  --role member
+```
+
+When using filtered `bb repo list` calls with flags such as `--workspace`, `--project`, or `--project-key`, set `--role` explicitly. In practice, `--role member` may be required for shared workspaces.
 
 ### List open PRs as JSON
 ```bash
