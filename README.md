@@ -7,6 +7,7 @@ Skills para agentes de IA. Instale via [npx skills CLI](https://www.npmjs.com/pa
 | Skill | Descrição |
 |-------|-----------|
 | `bitbucket-cli` | Usa o `bb` CLI para interagir com o Bitbucket Cloud (PRs, repos, pipelines, issues, perfis) |
+| `basic-memory-cli` | Usa o `bm` CLI para operar o Basic Memory (local/cloud, MCP, projetos, schema e ferramentas) |
 | `task-master-cli` | Usa o `task-master` CLI para gerenciar tasks, subtasks, dependências, complexidade e workflow TDD autopilot |
 
 ## Instalação
@@ -34,6 +35,25 @@ Cobre:
 npx skills add lucasmartinseti/skills --skill bitbucket-cli -a universal -g
 ```
 Obrigado [@gildas](https://github.com/gildas) por disponibilizar [bitbucket-cli](https://github.com/gildas/bitbucket-cli)
+
+---
+
+### basic-memory-cli
+
+Skill para o [`bm` / `basic-memory`](https://docs.basicmemory.com/reference/cli-reference) - CLI do Basic Memory.
+
+Cobre:
+- Comandos core (`status`, `doctor`, `mcp`, `reindex`, `reset`, `format`)
+- Gestão de projetos (`bm project ...`)
+- Fluxos cloud (login, sync, snapshots, restore)
+- Schema system (`validate`, `infer`, `diff`)
+- Wrapper de ferramentas MCP (`bm tool ...`) e imports
+
+#### Instalação
+
+```bash
+npx skills add lucasmartinseti/skills --skill basic-memory-cli -a universal -g
+```
 
 ---
 

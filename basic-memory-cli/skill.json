@@ -1,0 +1,11 @@
+{
+  "name": "basic-memory-cli",
+  "version": "1.0.0",
+  "description": "Use the `bm` CLI to manage Basic Memory workflows from the terminal, including local/cloud routing, MCP server operation, projects, schema, and tool commands.",
+  "author": {
+    "name": "lucasmartinseti",
+    "github": "lucasmartinseti"
+  },
+  "verticals": ["engineering", "operations", "knowledge-management"],
+  "tags": ["basic-memory", "bm", "cli", "mcp", "notes", "knowledge-base", "schema", "sync"]
+}
