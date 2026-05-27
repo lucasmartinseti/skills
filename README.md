@@ -9,6 +9,7 @@ Skills para agentes de IA. Instale via [npx skills CLI](https://www.npmjs.com/pa
 | `bitbucket-cli` | Usa o `bb` CLI para interagir com o Bitbucket Cloud (PRs, repos, pipelines, issues, perfis) |
 | `basic-memory-cli` | Usa o `bm` CLI para operar o Basic Memory (local/cloud, MCP, projetos, schema e ferramentas) |
 | `task-master-cli` | Usa o `task-master` CLI para gerenciar tasks, subtasks, dependências, complexidade e workflow TDD autopilot |
+| `jelastic-api` | Interage com a plataforma Jelastic (Virtuozzo Application Platform) via REST API v8.10.1 (ambientes, deploy, scaling, arquivos, SSL, marketplace) |
 
 ## Instalação
 
@@ -73,4 +74,26 @@ Cobre:
 
 ```bash
 npx skills add lucasmartinseti/skills --skill task-master-cli -a universal -g
+```
+
+---
+
+### jelastic-api
+
+Skill para interagir com a plataforma [Jelastic (Virtuozzo Application Platform)](https://docs.jelastic.com/api/8.10.1/public/#!/api) via REST API v8.10.1.
+
+Cobre:
+- Autenticação (Signin/Signout, Personal Access Tokens)
+- Ambientes (criar, listar, iniciar, parar, clonar, deletar)
+- Deploy (via URL, Git/VCS, Build Maven/Gradle)
+- Scaling horizontal e vertical de nós
+- Gerenciamento de arquivos e leitura de logs
+- SSL, domínios externos e IPs
+- Marketplace e Cloud Scripting (JPS)
+- Billing, quotas e assinaturas
+
+#### Instalação
+
+```bash
+npx skills add lucasmartinseti/skills --skill jelastic-api -a universal -g
 ```
