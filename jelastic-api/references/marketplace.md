@@ -1,7 +1,7 @@
 # Marketplace & JPS (Cloud Scripting)
 
-**Classes:** `marketplace.Jps` (7 métodos), `marketplace.Installation` (6 métodos), `marketplace.App` (10 métodos)  
-**Docs completos:** Memory → `notes/jelastic-api-marketplace`
+**Classes:** `marketplace.App` (10), `marketplace.Jps` (7), `marketplace.Installation` (6), `marketplace.Favorite` (4), `marketplace.Console` (3) — 30 métodos no total  
+**Docs completos:** Memory → `notes/jelastic-api-marketplace` · https://docs.jelastic.com/api/8.15.1/public/#!/api
 
 ---
 
@@ -19,12 +19,14 @@ POST /1.0/marketplace/jps/rest/install
 |-----------|-------------|-----------|
 | `session` | Sim | Token/PAT |
 | `appid` | Sim | `dashboard` |
+| `jps` | Sim | Conteúdo do manifesto (JSON/YAML) **ou** URL para manifesto remoto |
 | `envName` | Não | Ambiente alvo (se `type: update`) |
-| `manifest` | Não* | Conteúdo JSON/YAML do manifesto inline |
-| `jps` | Não* | URL para manifesto remoto |
 | `settings` | Não | JSON com variáveis do manifesto |
+| `nodeGroup` | Não | Grupo de nós alvo |
+| `displayName` | Não | Nome de exibição do ambiente |
+| `region` | Não | Região de provisionamento |
 
-*Forneça `manifest` ou `jps` (URL).
+> Na v8.15.1 o parâmetro é `jps` (aceita tanto o conteúdo inline quanto uma URL). Assinatura completa: `Install(appid, session, jps, [envName], [settings], [nodeGroup], [displayName], [region], [envGroups], [ownerUid], [logsPath], [loggerName], [writeOutputTasks], [skipNodeEmails], [auth])`.
 
 **Exemplo — executar comando em todos os nós:**
 ```json
@@ -59,52 +61,47 @@ GET /1.0/marketplace/jps/rest/getengineversion
 ```
 `session`, `appid`
 
-### GetScriptingTypes — Tipos disponíveis de scripting
+### Outros métodos `marketplace.Jps` (v8.15.1)
 
 ```
-GET /1.0/marketplace/jps/rest/getscriptingtypes
+GET  /1.0/marketplace/jps/rest/getappinfo        # GetAppInfo(appid, session, [jps], [lang], [ownerUid], [auth])
+GET  /1.0/marketplace/jps/rest/getappsettings    # GetAppSettings(appid, session, appUniqueName, [settingsId], [lang])
+POST /1.0/marketplace/jps/rest/executeappaction  # ExecuteAppAction(appid, session, appUniqueName, [action], [settingsId], [params], [lang])
+GET  /1.0/marketplace/jps/rest/getscriptingappid # GetScriptingAppid(appid, session)
+POST /1.0/marketplace/jps/rest/uninstall         # Uninstall(appid, session, appUniqueName, [force])
 ```
-`session`, `appid`
 
 ---
 
-## Instalações
+## Instalações (`marketplace.Installation`, 6 métodos)
 
-### GetInstallations — Listar apps instalados no ambiente
-
-```
-GET /1.0/marketplace/installation/rest/getinstallations
-```
-
-| Parâmetro | Obrigatório | Descrição |
-|-----------|-------------|-----------|
-| `session` | Sim | Token/PAT |
-| `appid` | Sim | `dashboard` |
-| `envName` | Não | Filtrar por ambiente |
-
-### Uninstall — Desinstalar app do marketplace
+### GetInfo — Informações de um app instalado
 
 ```
-POST /1.0/marketplace/installation/rest/uninstall
+GET /1.0/marketplace/installation/rest/getinfo
 ```
-`session`, `appid`, `envName`, `id`, `targetNodeGroup`
+`GetInfo(appid, session, appUniqueName)`
+
+### Demais métodos
+
+```
+GET  /1.0/marketplace/installation/rest/getsettings     # GetSettings(appid, session, appUniqueName, [settingsId], [lang])
+GET  /1.0/marketplace/installation/rest/getenvappid     # GetEnvAppid(appid, session, appUniqueName)
+GET  /1.0/marketplace/installation/rest/getscriptingappid
+POST /1.0/marketplace/installation/rest/executeaction   # ExecuteAction(appid, session, appUniqueName, [action], [settingsId], [params], [lang])
+POST /1.0/marketplace/installation/rest/uninstall       # Uninstall(appid, session, appUniqueName, [force])
+```
 
 ---
 
-## Apps do Marketplace
+## Apps do Marketplace (`marketplace.App`, 10 métodos)
 
-### GetApps — Listar aplicações disponíveis
+### GetList — Listar aplicações disponíveis
 
 ```
-GET /1.0/marketplace/app/rest/getapps
+GET /1.0/marketplace/app/rest/getlist
 ```
-
-| Parâmetro | Obrigatório | Descrição |
-|-----------|-------------|-----------|
-| `session` | Sim | Token/PAT |
-| `appid` | Sim | `dashboard` |
-| `search` | Não | Filtro por nome/keyword |
-| `categories` | Não | Filtro por categoria |
+`GetList(appid, session, [search], [lang], [checksum])`
 
 ### GetCategories — Categorias do marketplace
 
@@ -113,16 +110,26 @@ GET /1.0/marketplace/app/rest/getcategories
 ```
 `session`, `appid`
 
+### Demais métodos
+
+```
+GET  /1.0/marketplace/app/rest/getappinfo     # GetAppInfo(appid, session, id, [lang], [ownerUid])
+GET  /1.0/marketplace/app/rest/getaddonlist   # GetAddonList(envName, session, [nodeGroup], [search], [lang])
+GET  /1.0/marketplace/app/rest/getchecksum
+POST /1.0/marketplace/app/rest/install        # Install(appid, session, id, [envName], [settings], ...)
+POST /1.0/marketplace/app/rest/installaddon   # InstallAddon(envName, session, id, [settings], [nodeGroup], [skipEmail])
+POST /1.0/marketplace/app/rest/addapp         # AddApp(appid, session, manifest)
+POST /1.0/marketplace/app/rest/editapp        # EditApp(appid, session, id, manifest)
+POST /1.0/marketplace/app/rest/deleteapp      # DeleteApp(appid, session, id)
+```
+
 ---
 
-## Favoritos
-
-### GetFavorites / AddFavorite / DeleteFavorite / UpdateFavorite
+## Favoritos (`marketplace.Favorite`, 4 métodos)
 
 ```
-GET  /1.0/marketplace/favorite/rest/getfavorites
-POST /1.0/marketplace/favorite/rest/addfavorite
-POST /1.0/marketplace/favorite/rest/deletefavorite
-POST /1.0/marketplace/favorite/rest/updatefavorite
+GET  /1.0/marketplace/favorite/rest/getlist      # GetList(appid, session, [search], [lang], [checksum])
+POST /1.0/marketplace/favorite/rest/add          # Add(appid, session, id)
+POST /1.0/marketplace/favorite/rest/addmanifest  # AddManifest(appid, session, manifest)
+POST /1.0/marketplace/favorite/rest/delete       # Delete(appid, session, id)
 ```
-`session`, `appid`, `[id]`

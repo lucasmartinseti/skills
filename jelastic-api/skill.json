@@ -1,7 +1,7 @@
 {
   "name": "jelastic-api",
   "version": "1.0.0",
-  "description": "Interact with Jelastic (Virtuozzo Application Platform) via REST API v8.10.1 — managing environments, deploying applications, scaling nodes, managing files, configuring SSL/domains, and automating any platform operation.",
+  "description": "Interact with Jelastic (Virtuozzo Application Platform) via REST API v8.15.1 — managing environments, deploying applications, scaling nodes, managing files, configuring SSL/domains, provisioning IaaS resources, handling secrets, and automating any platform operation.",
   "author": {
     "name": "lucasmartinseti",
     "github": "lucasmartinseti"

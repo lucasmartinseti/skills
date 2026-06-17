@@ -1,6 +1,6 @@
 ---
 name: jelastic-api
-description: Interact with Jelastic (Virtuozzo Application Platform) via REST API v8.10.1. Use this skill whenever the user wants to manage Jelastic environments, deploy applications, scale nodes, manage files, configure SSL/domains, or automate any Jelastic platform operation from the command line. Trigger even when the user just mentions "Jelastic", "Virtuozzo", "PaaS environment", "jcloud", or asks to create/start/stop/clone environments, deploy apps, or check environment status — any Jelastic operation counts.
+description: Interact with Jelastic (Virtuozzo Application Platform) via REST API v8.15.1. Use this skill whenever the user wants to manage Jelastic environments, deploy applications, scale nodes, manage files, configure SSL/domains, provision IaaS resources (VMs, volumes, networks, load balancers), manage secrets, or automate any Jelastic platform operation from the command line. Trigger even when the user just mentions "Jelastic", "Virtuozzo", "PaaS environment", "jcloud", or asks to create/start/stop/clone environments, deploy apps, or check environment status — any Jelastic operation counts.
 ---
 
 # Jelastic API Skill
@@ -8,8 +8,8 @@ description: Interact with Jelastic (Virtuozzo Application Platform) via REST AP
 Automate Jelastic (Virtuozzo Application Platform) operations via its REST API. All actions that are available through the dashboard can be performed programmatically — creating environments, deploying apps, scaling nodes, managing files, configuring SSL, and more.
 
 **API base URL:** `https://[hoster-api-host]/1.0/`  
-**Full docs (336 methods):** Memory vault → `projects/chagbrasil/skills/notes/jelastic-api-*`  
-**Official docs:** https://docs.jelastic.com/api/8.10.1/public/#!/api
+**Full docs (422 methods, 38 classes):** Memory vault → `projects/chagbrasil/skills/notes/jelastic-api-*`  
+**Official docs:** https://docs.jelastic.com/api/8.15.1/public/#!/api
 
 ---
 
@@ -25,6 +25,8 @@ Load the relevant reference when working on a specific area:
 | Files & Logs | `references/files-logs.md` | File manager, node logs, statistics |
 | SSL & Domains | `references/ssl-domains.md` | Custom domains, SSL certificates, IPs |
 | Marketplace & JPS | `references/marketplace.md` | Install apps, run JPS scripts |
+| IaaS Resources | `references/iaas.md` | VMs, volumes, networks, floating IPs, load balancers, routers, VPN |
+| Secrets | `references/secrets.md` | Manage secrets (passwords, tokens, keys) |
 | Billing | `references/billing.md` | Quotas, billing history, subscriptions |
 
 ---
