@@ -1,0 +1,221 @@
+---
+name: mira-squared
+description: >-
+  Gera uma versão QUADRADA (1:1) de um deck do Mira, a partir do 16:9 original,
+  OU cria slides quadrados DO ZERO quando não há deck de origem, para vídeo em
+  formato quadrado (feed do Instagram, LinkedIn, etc.). Na conversão, não toca no
+  original: cria um novo arquivo index-1x1.html ao lado. Cada slide de conteúdo
+  vira só o título no topo e a animação num canvas quadrado padronizado logo
+  abaixo; o título encolhe até caber em 2 linhas e o viewBox da animação é casado
+  ao quadrado. O eixo de cada animação é reformulado por metáfora para preencher
+  o quadrado (não centraliza com faixa preta). O quadrado tem lado igual à altura
+  do 16:9 (100vh), centralizado, com as laterais em cinza #333. Texto, cores,
+  timings e loop ficam intactos. Use SEMPRE que o usuário disser /mira-squared,
+  versão quadrada, deixa quadrado, formato 1:1, 1080x1080, apresentação quadrada,
+  vídeo quadrado, cria um slide quadrado, novo slide 1:1, ou pedir o deck ou um
+  slide novo num formato quadrado.
+---
+
+# Skill: Versão Quadrada do Deck (1:1) com canvas quadrado, só título + animação
+
+Transforma um deck 16:9 do Mira numa versão **quadrada**, para gravar como vídeo quadrado (feed do Instagram, LinkedIn). Cada slide de conteúdo vira **só o título no topo + a animação grande num canvas quadrado padronizado**, com a animação **reformulada por metáfora para preencher o quadrado**. Tem dois modos:
+
+- **Modo conversão (padrão quando existe deck 16:9):** reformula um deck existente, slide a slide, conforme o playbook abaixo.
+- **Modo criação nativa (quando NÃO existe deck de origem, ou o usuário pede um slide novo já quadrado):** cria o slide do zero direto na geometria quadrada. Veja "Criação do zero na geometria nativa".
+
+> **Fonte da verdade:** o padrão desta skill está congelado na spec `_reversa_sdd/responsividade/sdd/mira-squared-1x1.md` (score 92) e no mockup `_reversa_sdd/responsividade/sdd/referencias/1.jpg`. Quando em dúvida sobre um valor exato, o resultado deve bater com o mockup. O padrão de qualidade do reflow é o mesmo do `/mira-vertical`.
+
+## O resultado, em uma frase (leia primeiro)
+
+Num slide de conteúdo da versão quadrada aparecem **apenas duas coisas**: o **título principal colado no topo** (1 ou 2 linhas, nunca mais) e a **animação grande preenchendo o canvas quadrado** logo abaixo, de ponta a ponta na largura da coluna. **Somem:** o subtítulo, o header do card (ícone + label + botão Replay) e a base do card (legenda uppercase + grade de pílulas). As laterais fora do quadrado ficam **#333333**. Capa e encerramento (que não têm `.glass-card`) mantêm o layout próprio.
+
+## CRITÉRIO Nº 1 (prioridade do usuário, leia antes de tudo)
+
+O essencial é que **a animação preencha a maior parte da área do quadrado (o quadrado laranja)**. Preencher bem o box vale mais que a perfeição do reflow por metáfora. **Nunca** é aceitável a animação ocupar só uma faixa fina com área vazia (ou preta) em volta. Antes de entregar, olhe cada slide e pergunte: **a animação domina o quadrado?** Se sobra muita área vazia, refaça.
+
+## Dimensão (leia primeiro, é o erro mais comum)
+
+O quadrado é **generalista para a tela atual**, não um tamanho fixo em pixels. O **lado é a altura cheia da tela** (`100vh`), que é a mesma altura do 16:9. Numa tela 1080p isso dá 1080x1080; numa tela maior ou menor, escala junto. O quadrado é a **coluna central** (lado = 100vh) centralizada na horizontal, com sobra dos dois lados como margem em #333333. Por que não 1080x1080 fixo: prenderia o resultado a uma única resolução.
+
+A abordagem **não é** moldura fixa que só centraliza (a versão antiga desta skill fazia isso, deixando o `<svg>` 16:9 com faixa preta acima e abaixo). Aqui o palco vira **canvas quadrado** e a geometria de cada animação é **reformulada no JS da cópia** para preencher o quadrado.
+
+## Criação do zero na geometria nativa
+
+Quando não houver deck 16:9 de origem, ou o usuário pedir "cria um slide quadrado sobre X", NÃO crie um 16:9 intermediário para converter depois. A animação nasce pensada para o quadrado:
+
+1. **Herde as regras criativas do `agents/mira-animator/SKILL.md`:** Regra Zero (loop interno obrigatório), liberdade criativa de metáfora, regra de idioma, regra de título (sem ícone, máximo 6 palavras), estrutura do card com glass-card. Manter a estrutura do glass-card é o que deixa o mesmo CSS desta skill esconder header/base e exibir só título + animação.
+2. **Geometria nativa desde a concepção:** o arquivo já nasce como `index-1x1.html` (na pasta do deck novo), com o bloco `<style id="mira-formato-1x1">` desta skill no head, canvas quadrado (`aspect-ratio: 1 / 1`) e `viewBox` quadrado casando (`W = 960`, `H = 960`).
+3. **Metáfora escolhida JÁ para o quadrado:** metáforas radiais/centradas (orbital, hub-and-spoke, pulso central, grade 2x2) rendem mais no quadrado que fileiras largas. O assunto ocupa a maior parte do palco, centralizado.
+4. Se o deck quadrado (`index-1x1.html`) já existir, o slide novo é adicionado nele, no padrão dos demais.
+
+## REGRA DE IDIOMA
+
+Siga `agents/_shared/idioma.md`. Texto visível em português correto. Proibido travessão (—): use vírgula ou dois-pontos.
+
+## REGRA DE FONTE MÍNIMA: 13px RENDERIZADOS (IMPERATIVO)
+
+Nenhum texto visível pode renderizar com menos de 13px. O `font-size` no SVG é em unidades do `viewBox`, não pixels de tela. Como o quadrado (lado = 100vh, ~1080px numa tela 1080p) é mais largo que a coluna do vertical, o mínimo do vertical (`font-size >= 24` para `W ≈ 960`) já fica folgado aqui; mantenha-o como piso. Texto HTML visível: `font-size` computado >= 13px (Tailwind `text-xs` PROIBIDO; menor permitido `text-sm`). Se não couber, encurte o texto, nunca diminua abaixo do mínimo.
+
+## Regra de Ouro: nunca destrua o original
+
+- O deck 16:9 (`index.html`) **permanece intacto**. Você nunca edita o arquivo de origem.
+- Você cria um **arquivo novo** ao lado: `index-1x1.html`, e é nele que todo o reflow e a composição acontecem.
+- O que você pode mudar na cópia: **geometria, layout e composição** (viewBox, coordenadas, eixo de espalhamento, ocultar subtítulo/header/base via CSS, posição do título).
+- O que continua **intocado** mesmo na cópia: textos, rótulos, cores, easing, durações, a lógica do loop interno e o `generation counter` (`window.__slugGen`) que evita vazamento. Você reposiciona e oculta, não reescreve a animação do zero.
+
+## As três viradas de chave
+
+### 1. Composição: só título + animação (CSS escopado)
+
+Tudo via CSS no bloco injetado, escopado aos slides de conteúdo com `:has(.glass-card)` (capa e encerramento, sem `.glass-card`, ficam de fora):
+
+- **Subtítulo oculto:** `body > section:has(.glass-card) .text-center > p { display: none }`.
+- **Header e base do card ocultos:** `body > section .glass-card > div:first-child, body > section .glass-card > div:last-child { display: none }`.
+- **Chrome do card zerado:** `.glass-card` sem `background`, `border`, `box-shadow`, `backdrop-filter` e `padding`, para a animação ir de ponta a ponta.
+- **Conteúdo colado no topo:** `body > section:has(.glass-card) { justify-content: flex-start; padding: 2.2vh 6px 1.4vh 6px }`.
+- **Título proeminente:** `body > section h2 { font-size: clamp(35px, 5.6vh, 52px); line-height: 1.1 }`. O auto-ajuste por JS reduz só quando passa de 2 linhas.
+
+Não remova os elementos do HTML: o CSS é cirúrgico e reversível, e o escopo `:has(.glass-card)` preserva capa, encerramento e qualquer slide-régua.
+
+### 2. Canvas quadrado (1/1) + casar o viewBox
+
+- **Palco quadrado:** `.anim-stage { height: auto !important; aspect-ratio: 1 / 1 !important }` em TODOS os slides. `height: auto` é obrigatório, senão um `height` fixo por slide venceria o `aspect-ratio`.
+- **viewBox casando:** para cada `<svg id="sv-...">`, mantenha `minX`, `minY` e a largura `W`, e troque a altura por **`H = W`** (aspecto 1:1). `preserveAspectRatio="xMidYMid meet"` continua; como o aspecto do `viewBox` passa a bater com o do palco, não há letterbox nem distorção.
+  - Exemplo: `viewBox="0 0 960 540"` vira `viewBox="0 0 960 960"`.
+- Se o slide usa o zoom `SZ` do `mira-size-animator`, preserve a fórmula, só casando a altura ao quadrado.
+
+### 3. Reflow do eixo para o quadrado (preencher a maior parte)
+
+A geometria de cada animação é reformulada para preencher o quadrado, conforme o playbook por metáfora abaixo. Esse é o passo que garante o CRITÉRIO Nº 1: a animação domina o quadrado, sem faixa fina e sem área vazia. O loop interno e o `generation counter` ficam intactos.
+
+## Auto-ajuste de título (script injetado)
+
+Títulos longos quebram o slide em 3 ou 4 linhas. Um IIFE mede a altura real de cada `h2` e reduz a fonte 1px por vez (piso 18px) até caber em no máximo 2 linhas. Roda no `load`, no `document.fonts.ready` e no `resize` (debounced). Injete junto aos outros scripts, antes de `lucide.createIcons()`:
+
+```js
+(function () {
+  const MAX_LINES = 2, MIN_FONT = 18;
+  function fitTitles() {
+    document.querySelectorAll('body > section h2').forEach(h2 => {
+      h2.style.removeProperty('font-size');
+      let font = parseFloat(getComputedStyle(h2).fontSize), guard = 0;
+      while (h2.scrollHeight > parseFloat(getComputedStyle(h2).lineHeight) * MAX_LINES + 2 && font > MIN_FONT && guard < 90) {
+        font -= 1; h2.style.setProperty('font-size', font + 'px', 'important'); guard++;
+      }
+    });
+  }
+  window.addEventListener('load', fitTitles);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitles);
+  window.addEventListener('resize', () => { clearTimeout(window.__fitT); window.__fitT = setTimeout(fitTitles, 150); });
+})();
+```
+
+## Playbook de reflow por metáfora (alvo: quadrado 1:1)
+
+Aplique conforme a metáfora do slide. O objetivo é sempre o CRITÉRIO Nº 1: preencher a maior parte do quadrado. O princípio geral está no fim.
+
+**Radial / orbital / hub (relógio, radar, núcleo + satélites).** Já é centrado; **aumente o raio** (`R`) para preencher o quadrado. No orbital, use elipse quase circular (`rx ≈ ry`), diferente da elipse achatada do 16:9. Núcleo e pulso radial no centro.
+
+**Fluxo (partícula viajando entre nós).** O eixo pode **permanecer horizontal** (o quadrado é mais largo que o 9:16), sempre reescalado para ocupar a largura e boa parte da altura; ou disposto na **diagonal** quando isso preencher melhor. Não deixar como faixa fina no meio: aumente o espaçamento vertical dos nós e o raio deles.
+
+**Comparação A vs B / transformação A → B.** Mantenha lado a lado se os dois blocos couberem no quadrado em tamanho grande; senão empilhe A em cima e B embaixo. O realce alternado (spotlight) e a partícula de transformação continuam.
+
+**Rede / grafo / nuvem de nós (force layout).** Recentralize com `forceCenter(W/2, H/2)` no `H` novo (`H = W`); aumente o espalhamento (`forceManyBody().strength` mais negativo, maior `linkDistance`) até a nuvem usar o quadrado; cresça `forceCollide`; e clampe as posições no intervalo de `margem` até `W menos margem` em cada eixo.
+
+**Flip cards / battle arena (stage HTML).** Não há `viewBox` para casar; o quadrado 1:1 vale como caixa. Disponha os cards (coluna ou grade 2x2) para preencher o quadrado.
+
+**Fileira de muitos itens (timeline, 6+ etapas).** Recomponha em grade de 2 colunas (ou serpentina), com itens grandes, para preencher o quadrado.
+
+**Princípio geral (metáfora fora da lista), OBRIGATÓRIO:** identifique o **eixo dominante** e recomponha (escala e disposição) até o assunto ocupar a maior parte do quadrado, centralizado, com o loop interno preservado. No quadrado não é preciso girar horizontal para vertical (como no 9:16): basta escalar e distribuir para preencher.
+
+## Passos
+
+1. **Localizar o deck.** Ache o `index.html` do deck (em `decks/<deck>/` ou `slides/<tema>/`). Se houver mais de um deck e o usuário não disser qual, pergunte. Se faltar `index.html`, ou ele não tiver `.glass-card` / `.anim-stage` / `<svg id="sv-...">`, **aborte com mensagem clara** sem criar arquivo parcial.
+2. **Copiar para o novo arquivo.** Copie `index.html` para `index-1x1.html` na mesma pasta (caminhos relativos de logo, vídeo e imagens continuam válidos). O `index.html` fica byte a byte igual.
+3. **Injetar a moldura + composição.** Logo antes de `</head>` do `index-1x1.html`, como último bloco de estilo (depois do Tailwind, para vencer a especificidade), insira o bloco `<style id="mira-formato-1x1">` canônico (abaixo): quadrado 100vh, fundo #333333 fora da coluna, composição só título + animação, canvas quadrado 1/1.
+4. **Injetar o script de auto-ajuste de título.** Adicione o IIFE `fitTitles` (acima) no bloco de scripts, antes de `lucide.createIcons()`.
+5. **Reformular cada animação no JS.** Para cada slide de conteúdo: case o `H` do `viewBox` ao quadrado (`H = W`, mantendo `minX`, `minY`, `W`) e aplique o reflow do eixo para preencher o quadrado (playbook). Preserve textos, cores, easing, durações, loop e `generation counter`.
+6. **Verificar o encaixe (CRITÉRIO Nº 1).** Confira que, no quadrado (lado = 100vh): (a) cada slide de conteúdo mostra só título + animação; (b) o título cabe em no máx. 2 linhas, colado no topo; (c) **a animação preenche a maior parte do quadrado**, sem faixa fina/preta nem distorção; (d) o loop interno ainda roda; (e) capa e encerramento mantêm o layout próprio.
+7. **Reportar.** Informe o caminho `index-1x1.html`, que o quadrado é generalista para a tela (lado = altura do 16:9; numa tela 1080p, 1080x1080), o que foi reformulado por slide (uma linha por slide) e como gravar: abra em tela cheia num Chromium moderno (o `:has()` da composição exige Edge/Chrome atual) e recorte a coluna central quadrada.
+
+### Bloco `<style id="mira-formato-1x1">` canônico (gerar exatamente isto)
+
+```html
+<style id="mira-formato-1x1">
+  /* Versão quadrada generalista para a tela atual (reflow da animação).
+     Lado = altura cheia da tela (= altura do 16:9). Numa tela 1080p, 1080x1080. */
+  :root {
+    --fmt-w: 100vh;   /* lado do quadrado = altura da tela */
+    --fmt-h: 100vh;
+  }
+  html { background: #333333; }
+  /* Centraliza a coluna na horizontal via flex (não margin:auto: o Preflight
+     do Tailwind injeta body{margin:0} em runtime e venceria o margin:auto).
+     Fundo FORA do quadrado (margens laterais) em #333333. */
+  body {
+    background: #333333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  body > section {
+    width: var(--fmt-w) !important;
+    height: var(--fmt-h) !important;
+    min-height: var(--fmt-h) !important;
+    overflow: hidden;
+    background: var(--mira-bg, #000) !important;
+  }
+  /* O conteúdo preenche a largura do quadrado */
+  body > section .max-w-6xl,
+  body > section .max-w-5xl,
+  body > section .max-w-4xl,
+  body > section .max-w-3xl,
+  body > section .max-w-2xl { max-width: 100% !important; }
+  /* Canvas quadrado de TODOS os slides. O viewBox de cada animacao foi casado (H = W). */
+  .anim-stage { height: auto !important; aspect-ratio: 1 / 1 !important; }
+  /* QUADRADO: cada slide de conteudo = somente o titulo principal + a animacao grande.
+     Subtitulo, header do card (icone/label/Replay) e a base (legenda + pilulas) ficam ocultos;
+     o card perde fundo/borda/padding para a animacao ir de ponta a ponta. A animacao (SVG) nao e tocada pelo CSS. */
+  body > section h2 { font-size: clamp(35px, 5.6vh, 52px) !important; line-height: 1.1 !important; }
+  body > section:has(.glass-card) .text-center > p { display: none !important; }            /* subtitulo */
+  body > section:has(.glass-card) .text-center { margin-bottom: 8px !important; padding: 0 14px !important; }
+  body > section:has(.glass-card) { justify-content: flex-start !important; padding: 2.2vh 6px 1.4vh 6px !important; }
+  body > section .glass-card { background: none !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; padding: 0 !important; }
+  body > section .glass-card > div:first-child,                                              /* header do card */
+  body > section .glass-card > div:last-child { display: none !important; }                  /* base (pilulas) */
+  .slide-counter { font-size: 13px !important; }
+  /* Pílulas (quando reaproveitadas em algum slide): reduz colunas na coluna. */
+  body > section [class*="md:grid-cols-4"] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  /* Flip cards (slide tipo exemplos): empilha/grade em vez de fileira larga. */
+  #st-exemplos > div { flex-direction: column !important; gap: 14px !important; }
+</style>
+```
+
+## Edge cases (do mais comum ao menos)
+
+- **Título longo / palavra grande:** o auto-ajuste reduz a fonte até caber em 2 linhas. Título curto: fica no tamanho cheio.
+- **Animação radial (relógio, radar) num canvas quadrado:** fica centrada e preenche bem o quadrado (o círculo casa melhor com 1:1 que com 16:9). Aumente o raio até perto das bordas.
+- **Animação de fluxo horizontal:** reescale para ocupar o quadrado; pode manter o eixo horizontal (o quadrado é mais largo que o 9:16). Não deixar faixa fina.
+- **Slide sem `.glass-card` (capa, encerramento, slide-régua):** as regras com `:has(.glass-card)` não se aplicam; layout próprio preservado.
+- **Canvas quadrado excede a coluna numa tela larga:** o excedente é cortado pelo `overflow: hidden` da seção. Ajuste fino por slide se necessário.
+- **Flip cards (stage HTML):** sem `viewBox` para casar; disponha os cards para preencher o quadrado.
+- **Navegador sem `:has()`:** a composição depende dele; avise que a gravação precisa de um Chromium moderno (Edge/Chrome atual).
+
+## Checklist
+
+**Os que mais falham (cheque primeiro):**
+- [ ] **CRITÉRIO Nº 1: a animação preenche a maior parte do quadrado** (nada de faixa fina/preta com área vazia em volta).
+- [ ] Cada slide de conteúdo mostra SÓ título + animação: subtítulo, header do card e base de pílulas ocultos; card sem fundo/borda/padding.
+- [ ] Nenhum título passa de 2 linhas: o IIFE de auto-ajuste está injetado; o título fica colado no topo (`justify-content: flex-start`).
+- [ ] Canvas quadrado em todos os slides (`aspect-ratio: 1 / 1`) e `viewBox` casado (`H = W`), sem distorção nem letterbox.
+- [ ] Nenhum texto SVG renderiza abaixo de 13px (font-size SVG >= 24 no `W` padrão).
+
+- [ ] `index.html` original intacto (byte a byte).
+- [ ] `index-1x1.html` criado na mesma pasta do deck.
+- [ ] Bloco `<style id="mira-formato-1x1">` canônico injetado antes de `</head>`.
+- [ ] Fundo fora da coluna em #333333; cada `body > section` com largura e altura `100vh`, centralizado via flex (não `margin:auto`).
+- [ ] Textos, cores, easing, durações, loop interno e generation counter intactos.
+- [ ] Zoom `SZ` do mira-size-animator preservado nos slides que o usam (só com a altura casada).
+- [ ] Capa e encerramento com layout próprio preservado.
+- [ ] Navegação funcionando; nenhum slide corta o conteúdo no quadrado.
+- [ ] Nenhum travessão (—); acentuação correta.
