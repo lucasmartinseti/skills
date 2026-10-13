@@ -1,0 +1,19 @@
+# Deploy contínuo no Cloudflare Workers.
+# Variáveis necessárias em Settings > CI/CD > Variables (masked):
+#   CLOUDFLARE_API_TOKEN  - token com permissão "Workers Scripts: Edit" + "Workers KV Storage: Edit" (template "Edit Cloudflare Workers")
+image: node:22
+
+stages: [deploy]
+
+deploy:
+  stage: deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  cache:
+    key: npm
+    paths: [.npm/]
+  script:
+    - npm ci --cache .npm --prefer-offline
+    - npm run build
+    - npm run check
+    - npx wrangler deploy

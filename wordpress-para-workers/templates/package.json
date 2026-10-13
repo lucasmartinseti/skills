@@ -1,0 +1,21 @@
+{
+  "name": "exemplo-site",
+  "private": true,
+  "type": "module",
+  "description": "Site estático de Nome do Cliente (migrado do WordPress) servido por Cloudflare Workers, com área mínima de gestão",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "assets": "node scripts/collect-assets.mjs",
+    "check": "node scripts/check.mjs",
+    "senha": "node scripts/senha.mjs",
+    "redefinir-senha": "node scripts/redefinir-senha.mjs",
+    "dev": "npm run build && wrangler dev",
+    "deploy": "npm run build && npm run check && wrangler deploy"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2"
+  },
+  "devDependencies": {
+    "wrangler": "^4.40.0"
+  }
+}

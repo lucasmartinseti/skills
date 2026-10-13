@@ -1,0 +1,11 @@
+{
+  "name": "wordpress-para-workers",
+  "version": "1.0.0",
+  "description": "Migrate a WordPress site on shared hosting (DreamHost, cPanel) to a fully static site on Cloudflare Workers + Static Assets — verified backup, local rendering from the backup, reproducible build, minimal /wp-admin area that keeps WordPress users and passwords, IP blocking, and zero-downtime domain cutover.",
+  "author": {
+    "name": "lucasmartinseti",
+    "github": "lucasmartinseti"
+  },
+  "verticals": ["engineering", "operations", "devops"],
+  "tags": ["wordpress", "cloudflare", "workers", "static-site", "migration", "wrangler", "dreamhost", "elementor", "backup"]
+}

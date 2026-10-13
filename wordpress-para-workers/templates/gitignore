@@ -1,0 +1,10 @@
+node_modules/
+.wrangler/
+.dev.vars
+.env
+.DS_Store
+
+# Credenciais da área de gestão geradas localmente (ficam só nesta máquina / gerenciador de senhas)
+*.local.txt
+*.local.md
+*.local.json
