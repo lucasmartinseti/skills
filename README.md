@@ -10,6 +10,7 @@ Skills para agentes de IA. Instale via [npx skills CLI](https://www.npmjs.com/pa
 | `basic-memory-cli` | Usa o `bm` CLI para operar o Basic Memory (local/cloud, MCP, projetos, schema e ferramentas) |
 | `task-master-cli` | Usa o `task-master` CLI para gerenciar tasks, subtasks, dependências, complexidade e workflow TDD autopilot |
 | `jelastic-api` | Interage com a plataforma Jelastic (Virtuozzo Application Platform) via REST API v8.10.1 (ambientes, deploy, scaling, arquivos, SSL, marketplace) |
+| `wordpress-para-workers` | Migra um site WordPress (DreamHost, cPanel) para site estático no Cloudflare Workers, com backup verificado, build reproduzível, área `/wp-admin` mínima e virada de domínio |
 
 ## Instalação
 
@@ -96,4 +97,24 @@ Cobre:
 
 ```bash
 npx skills add lucasmartinseti/skills --skill jelastic-api -a universal -g
+```
+
+---
+
+### wordpress-para-workers
+
+Skill para migrar um site WordPress de hospedagem compartilhada para site 100% estático no [Cloudflare Workers + Static Assets](https://developers.cloudflare.com/workers/static-assets/).
+
+Cobre:
+- Backup integral verificado por MD5 + dump do banco e diagnóstico de uso real
+- Renderização local do WordPress a partir do backup (PHP + MySQL locais)
+- Captura e build estático (`raw/` → `public/`) com check de resíduos do WordPress
+- Worker com área administrativa mínima em `/wp-admin` (mesmos usuários e senhas do WordPress, bloqueio de IP)
+- Deploy, virada de domínio com custom domains e Worker de redirects para domínios antigos
+- Templates prontos (`wrangler.jsonc`, scripts de build/check, Worker, CI do GitLab) e armadilhas conhecidas
+
+#### Instalação
+
+```bash
+npx skills add lucasmartinseti/skills --skill wordpress-para-workers -a universal -g
 ```

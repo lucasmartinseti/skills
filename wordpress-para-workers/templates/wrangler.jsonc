@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "exemplo",
+  "account_id": "<ACCOUNT_ID>",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    "run_worker_first": true
+  },
+  "kv_namespaces": [
+    // Dados da área administrativa (/wp-admin/):
+    //   page:/caminho/  HTML completo de página editada   | prev:/caminho/  versão anterior
+    //   user:<login>    usuário (e-mail, nome, hash da senha, ativo)
+    //   fail:<ip>       erros de senha seguidos            | block:<ip>  IP bloqueado (3 erros seguidos)
+    { "binding": "CONTENT", "id": "<KV_NAMESPACE_ID>" }
+  ],
+  "vars": {
+    "SITE_HOST": "exemplo.com.br"
+  },
+  "observability": { "enabled": true },
+  "routes": [
+     { "pattern": "exemplo.com.br", "custom_domain": true },
+     { "pattern": "www.exemplo.com.br", "custom_domain": true }
+  ]
+}

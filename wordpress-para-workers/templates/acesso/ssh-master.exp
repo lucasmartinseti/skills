@@ -1,0 +1,14 @@
+set timeout 60
+set dir [lindex $argv 0]
+set sock [lindex $argv 1]
+set fh [open "$dir/pass" r]
+set pass [string trim [read $fh]]
+close $fh
+spawn ssh -o StrictHostKeyChecking=accept-new -o PubkeyAuthentication=no -o PreferredAuthentications=password -o ServerAliveInterval=30 -o ControlMaster=yes -o ControlPath=$sock -o ControlPersist=4h -fN <usuario>@<servidor>.dreamhost.com
+expect {
+  -re "assword:" { send "$pass\r"; exp_continue }
+  -re "Permission denied" { puts "\nAUTH FAILED"; exit 1 }
+  -re "Too many authentication failures" { puts "\nTOO MANY AUTH FAILURES"; exit 4 }
+  timeout { puts "\nTIMEOUT"; exit 2 }
+  eof { }
+}
