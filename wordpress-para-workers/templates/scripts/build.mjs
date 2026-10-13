@@ -100,8 +100,8 @@ function transform(html, pathname) {
   const ld = [];
   html = html.replace(/<script type=['"]application\/ld\+json['"][^>]*>[\s\S]*?<\/script>/g, (m) => { ld.push(m); return `@@LDJSON${ld.length - 1}@@`; });
 
-  // 2. Seções/blocos inteiros que saem: newsletter (Mailchimp) do rodapé
-  html = replaceElements(html, /<section class="elementor-section elementor-top-section elementor-element elementor-element-53448e3a[^"]*"[^>]*>/, () => '');
+  // 2. Seções/blocos inteiros que saem: newsletter (Mailchimp) do rodapé. Troque <data-id> pelo data-id da seção no HTML capturado.
+  html = replaceElements(html, /<section class="elementor-section elementor-top-section elementor-element elementor-element-<data-id>[^"]*"[^>]*>/, () => '');
   html = replaceElements(html, /<form id="mc4wp-form-\d+"[^>]*>/, () => '');
 
   // 3. Formulários do Contact Form 7 -> chamadas para contato
@@ -161,7 +161,7 @@ function transform(html, pathname) {
 
   // 9b. Consertos de referências quebradas que já existiam no WordPress
   html = html.replace(/\/homologacao\/wp-content\/uploads\//g, '/wp-content/uploads/');            // caminho da homologação de 2022
-  html = html.replace(/uploads\/2022\/06\/selo\.svg/g, 'uploads/2022/06/selo-gptw.svg');      // selo GPTW: arquivo antigo não existe mais
+  html = html.replace(/uploads\/2022\/06\/selo\.svg/g, 'uploads/2022/06/selo-novo.svg');      // imagem antiga que não existe mais no servidor
 
   // 10. URLs absolutas do próprio site -> relativas (inclusive a forma com barras escapadas usada em JSON de atributos)
   html = html.replace(/https?:\\\/\\\/exemplo\.com\.br\\\//g, '\\/');

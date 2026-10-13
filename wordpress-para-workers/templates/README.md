@@ -15,7 +15,7 @@ Copie para o novo projeto e adapte. Os dados do cliente original foram trocados 
 | `site.css`, `site.js`, `site-search.js` | `public/assets/` | cores dos botões (`wpw-*`), tipos no índice de busca |
 | `wrangler.jsonc` | raiz | `name`, `account_id`, id do KV (`wrangler kv namespace create CONTENT`), `SITE_HOST`, rotas comentadas |
 | `package.json`, `.gitlab-ci.yml`, `gitignore` (-> `.gitignore`) | raiz | nome/descrição |
-| `redirects-wrangler.jsonc`, `redirects-worker.js` | `redirects/` (Worker separado) | domínios antigos e destino |
+| `redirects-wrangler.jsonc`, `redirects-worker.js` | `redirects/` (Worker separado, os dois arquivos juntos; `npx wrangler deploy -c redirects/redirects-wrangler.jsonc`) | domínios antigos e destino |
 | `render-local/router.php`, `render-local/prep-db.php` | scratchpad da renderização local | prefixo das tabelas, lista de plugins a desativar, extrações extras |
 | `acesso/ssh-master.exp` | scratchpad | usuário@host |
 | `acesso/cf-inspect.mjs` | scratchpad | zonas de interesse (lê o token OAuth do wrangler sem imprimir; só leituras) |

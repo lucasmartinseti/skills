@@ -163,7 +163,7 @@ async function admin(request, env, url) {
     const users = [];
     for (const k of await listKeys(env, 'user:')) {
       const u = JSON.parse(await env.CONTENT.get(k.name));
-      users.push({ login: u.login, email: u.email, nome: u.nome, ativo: u.ativo !== false, origem: u.origem || 'local', senha: hashFormat(u.hash), ultimoLogin: u.ultimoLogin || null });
+      users.push({ login: u.login, email: u.email, nome: u.nome, ativo: u.ativo === true, origem: u.origem || 'local', senha: hashFormat(u.hash), ultimoLogin: u.ultimoLogin || null });
     }
     users.sort((a, b) => a.login.localeCompare(b.login));
     return json({ ok: true, usuarios: users, eu: user.login });

@@ -10,9 +10,9 @@ publicado é só HTML/CSS/JS/arquivos servidos por um Worker, e o que precisava 
 mediante e-mail, busca, painel) é substituído por algo estático ou por um Worker pequeno. Nada muda no site em
 produção até a virada do domínio, e o backup completo é feito antes de qualquer coisa.
 
-Dois casos reais orientam a skill: um site de escritório com tema próprio e formulários via Worker, e um site
-de catálogo industrial em OceanWP + Elementor (125 páginas, área `/wp-admin` com usuários do WordPress). Os
-templates desta skill vêm do segundo, com os dados do cliente trocados por `exemplo.com.br` e placeholders.
+Dois casos reais orientam a skill: um site com tema próprio e formulários via Worker, e um site de catálogo em
+OceanWP + Elementor com área `/wp-admin` mantendo os usuários do WordPress. Os templates desta skill vêm do
+segundo, com os dados do cliente trocados por `exemplo.com.br` e placeholders.
 
 ## Quando a skill se aplica e quando não
 
@@ -106,7 +106,7 @@ de site para site; o resto é quase idêntico.
   `-o PubkeyAuthentication=no -o PreferredAuthentications=password` no master via `expect`.
 - `php -r 'include "wp-config.php"'` para ler a senha do banco não funciona quando o host não resolve
   (o WP aborta antes do echo): extraia com `sed`.
-- WordPress 6.8+ usa bcrypt com prefixo `$wp$2y$` sobre `base64(sha384(senha))`; usuários antigos ainda têm
+- WordPress 6.8+ usa bcrypt com prefixo `$wp$2y$` sobre `base64(hmac_sha384(trim(senha), 'wp-sha384'))`; usuários antigos ainda têm
   phpass `$P$`. `auth.js` valida os dois e regrava em PBKDF2 no primeiro login.
 - Testar senha errada na área administrativa conta no IP de quem roda o teste (normalmente o mesmo do usuário):
   no máximo uma tentativa, e apague `fail:<ip>` depois.

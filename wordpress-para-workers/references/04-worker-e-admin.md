@@ -23,10 +23,12 @@ Ordem das decisões por requisição:
 - Mesmos caminhos do WordPress para o cliente não estranhar: login em `/wp-login.php` (form `log`/`pwd`),
   painel em `/wp-admin/`. Cookie de sessão HMAC (`SESSION_SECRET`), 8 h, `Path=/wp-admin`, HttpOnly, Secure,
   SameSite=Lax. POST só da própria origem (`Origin` ou `Sec-Fetch-Site`).
-- **Usuários = os do WordPress**: exporte `P_users` (login, e-mail, nome, `user_pass`) para
-  `usuarios.local.json` no formato do `wrangler kv bulk put` (`[{key:"user:<login>", value:"{...}"}]`), fora do
-  git. `auth.js` valida `pbkdf2:` (próprio), `$wp$2y$` (WP 6.8+: bcrypt sobre `base64(sha384(trim(senha)))`,
-  `bcryptjs`), `$2y$/$2a$` (bcrypt puro) e `$P$` (phpass: 2^n rounds de md5). No login correto com hash antigo,
+- **Usuários = os do WordPress**: exporte a tabela `<prefixo>users` (login, e-mail, nome, `user_pass`) para
+  `usuarios.local.json` no formato do `wrangler kv bulk put`, fora do git. Cada item:
+  `{"key":"user:<login>","value":"{\"login\":\"<login>\",\"email\":\"<e-mail>\",\"nome\":\"<display_name>\",\"hash\":\"<user_pass>\",\"ativo\":true,\"origem\":\"wordpress\"}"}`.
+  `ativo` precisa ser `true`: sem ele o login é recusado. `auth.js` valida `pbkdf2:` (próprio), `$wp$2y$` (WP 6.8+:
+  bcrypt sobre `base64(hmac_sha384(trim(senha), 'wp-sha384'))`, `bcryptjs`), `$2y$/$2a$` (bcrypt puro) e `$P$`
+  (phpass: 2^n rounds de md5). No login correto com hash antigo,
   regrava em PBKDF2 (`hashMigradoEm`). bcrypt custo 10 levou ~2,7 s na primeira validação em produção e passou
   no limite de CPU do Worker; depois do rehash o login fica em ms.
 - **Bloqueio por IP**: `fail:<ip>` conta erros seguidos (TTL 1 h); no 3º, `block:<ip>` por 24 h e a tela

@@ -23,9 +23,11 @@
   "vars": {
     "SITE_HOST": "exemplo.com.br"
   },
-  "observability": { "enabled": true },
-  "routes": [
-     { "pattern": "exemplo.com.br", "custom_domain": true },
-     { "pattern": "www.exemplo.com.br", "custom_domain": true }
-  ]
+  "observability": { "enabled": true }
+  // Virada do domínio (references/05-virada-e-pos.md): só então ative o bloco abaixo (e a vírgula acima).
+  // Antes disso o deploy vai só para o workers.dev e nada muda no domínio de produção.
+  // "routes": [
+  //   { "pattern": "exemplo.com.br", "custom_domain": true },
+  //   { "pattern": "www.exemplo.com.br", "custom_domain": true }
+  // ]
 }

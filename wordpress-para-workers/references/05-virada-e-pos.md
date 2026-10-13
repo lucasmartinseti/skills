@@ -20,7 +20,8 @@ Erro `100117` ("already has externally managed DNS records") no deploy = os regi
 Worker separado e minúsculo (`templates/redirects-worker.js` + `templates/redirects-wrangler.jsonc`): 301 para
 a raiz do site final (caminho não preservado quando os sites antigos já estavam fora do ar), custom domains
 para apex e `www` de cada zona. Mesmo procedimento de apagar A/CNAME antes. O e-mail (MX) dessas zonas não é
-afetado.
+afetado. Copie os dois arquivos juntos para `redirects/` (o `main` é relativo ao config) e publique com
+`npx wrangler deploy -c redirects/redirects-wrangler.jsonc`.
 
 ## Pós-virada (listar para o usuário)
 

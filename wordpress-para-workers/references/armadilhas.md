@@ -56,7 +56,7 @@ OAuth do wrangler para leituras; `MYSQL_PWD` extraído por `sed`), `kv key get/l
 - Formulários costumam ser 3 ou 4 (contato no rodapé de todas as páginas, orçamento em produtos, currículo com
   upload, newsletter); currículos ficam em `uploads/cfdb7_uploads` (dados pessoais: só no backup).
 - Botão flutuante de WhatsApp sem `wa.me` no HTML = widget do RD Station (loader em cloudfront).
-- Hashes: WP 6.8+ `$wp$2y$10$...` (bcrypt de `base64(sha384(trim(senha)))`); usuários sem login recente seguem
+- Hashes: WP 6.8+ `$wp$2y$10$...` (bcrypt de `base64(hmac_sha384(trim(senha), 'wp-sha384'))`); usuários sem login recente seguem
   em phpass `$P$B...`.
 
 ## Processo

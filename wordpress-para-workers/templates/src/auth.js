@@ -25,10 +25,12 @@ async function verifyPbkdf2(senha, stored) {
   return a.length === b.length && crypto.subtle.timingSafeEqual(a, b);
 }
 
-// ---- bcrypt do WordPress 6.8+: "$wp$2y$10$..." = bcrypt( base64( sha384( trim(senha) ) ) ) ----
+// ---- bcrypt do WordPress 6.8+: "$wp$2y$10$..." = bcrypt( base64( hmac_sha384( trim(senha), 'wp-sha384' ) ) ) ----
+// Igual a wp_hash_password()/wp_check_password() do core (wp-includes/pluggable.php); o login do WP faz trim na senha.
 async function verifyWpBcrypt(senha, stored) {
-  const digest = await crypto.subtle.digest('SHA-384', enc.encode(senha.trim()));
-  const input = btoa(String.fromCharCode(...new Uint8Array(digest)));
+  const key = await crypto.subtle.importKey('raw', enc.encode('wp-sha384'), { name: 'HMAC', hash: 'SHA-384' }, false, ['sign']);
+  const mac = await crypto.subtle.sign('HMAC', key, enc.encode(senha.trim()));
+  const input = btoa(String.fromCharCode(...new Uint8Array(mac)));
   return bcrypt.compare(input, stored.slice(3));
 }
 
