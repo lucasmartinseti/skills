@@ -11,6 +11,7 @@ Skills para agentes de IA. Instale via [npx skills CLI](https://www.npmjs.com/pa
 | `task-master-cli` | Usa o `task-master` CLI para gerenciar tasks, subtasks, dependências, complexidade e workflow TDD autopilot |
 | `jelastic-api` | Interage com a plataforma Jelastic (Virtuozzo Application Platform) via REST API v8.10.1 (ambientes, deploy, scaling, arquivos, SSL, marketplace) |
 | `wordpress-para-workers` | Migra um site WordPress (DreamHost, cPanel) para site estático no Cloudflare Workers, com backup verificado, build reproduzível, área `/wp-admin` mínima e virada de domínio |
+| `proton-pass-cli` | Usa o `pass-cli` do Proton Pass para o agente obter credenciais com sessão isolada por token, leitura auditada (`PROTON_PASS_AGENT_REASON`) e injeção de segredos sem exibir valores |
 
 ## Instalação
 
@@ -117,4 +118,24 @@ Cobre:
 
 ```bash
 npx skills add lucasmartinseti/skills --skill wordpress-para-workers -a universal -g
+```
+
+---
+
+### proton-pass-cli
+
+Skill para o [`pass-cli`](https://protonpass.github.io/pass-cli/) — CLI oficial do Proton Pass — usado por um agente de IA para obter credenciais.
+
+Cobre:
+- Sessão isolada por agente (`PROTON_PASS_SESSION_DIR`) com login por token de agente/PAT vindo do keychain do sistema ou do ambiente
+- Descoberta de vaults e itens (`vault list`, `share list`, `item list`)
+- Leitura auditada com `PROTON_PASS_AGENT_REASON` e referências `pass://vault/item/field`
+- Injeção de segredos sem exibir valores (`pass-cli run`, `pass-cli inject`)
+- Recuperação de sessão expirada e confirmação humana antes de operações destrutivas
+- Regras que impedem gravar o token ou valores de segredo em arquivos, notas ou logs
+
+#### Instalação
+
+```bash
+npx skills add lucasmartinseti/skills --skill proton-pass-cli -a universal -g
 ```

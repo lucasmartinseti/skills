@@ -1,0 +1,11 @@
+{
+  "name": "proton-pass-cli",
+  "version": "1.0.0",
+  "description": "Use the Proton Pass CLI (`pass-cli`) to fetch credentials and secrets for an AI agent — isolated agent session with a Personal Access Token from the OS keychain or environment, vault and item discovery, audited reads with PROTON_PASS_AGENT_REASON, secret injection with `pass-cli run` / `pass-cli inject` without printing values, and session recovery.",
+  "author": {
+    "name": "lucasmartinseti",
+    "github": "lucasmartinseti"
+  },
+  "verticals": ["engineering", "operations", "security"],
+  "tags": ["proton-pass", "pass-cli", "secrets", "credentials", "password-manager", "cli", "agent"]
+}
