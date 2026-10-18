@@ -56,7 +56,8 @@ PROTON_PASS_AGENT_REASON="Render the database config for the local test run" \
 
 - Always use `--out-file`: without it the rendered secrets go to stdout, i.e. into the agent's output.
 - The output file gets mode `0600` by default. Do not pass a wider `--file-mode`.
-- `--force` overwrites without prompting; use it only on a file the agent itself created in this task.
+- If the output file already exists, `inject` prompts for confirmation, which blocks a non-interactive agent. Write
+  to a new path; `--force` (overwrite without prompting) only on a file the agent itself created in this task.
 - Make sure the output path is ignored by git (`git check-ignore <file>`) and delete the file when the task ends.
 
 ## `pass-cli item view`
