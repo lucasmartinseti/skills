@@ -127,7 +127,7 @@ npx skills add lucasmartinseti/skills --skill wordpress-para-workers -a universa
 Skill para o [`pass-cli`](https://protonpass.github.io/pass-cli/) — CLI oficial do Proton Pass — usado por um agente de IA para obter credenciais.
 
 Cobre:
-- Sessão isolada por agente (`PROTON_PASS_SESSION_DIR`) com login por token de agente/PAT vindo do ambiente
+- Sessão isolada por agente (`PROTON_PASS_SESSION_DIR`) com login por token de agente/PAT vindo do keychain do sistema ou do ambiente
 - Descoberta de vaults e itens (`vault list`, `share list`, `item list`)
 - Leitura auditada com `PROTON_PASS_AGENT_REASON` e referências `pass://vault/item/field`
 - Injeção de segredos sem exibir valores (`pass-cli run`, `pass-cli inject`)

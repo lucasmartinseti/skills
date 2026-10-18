@@ -6,7 +6,7 @@ Checked against `pass-cli <command> --help` of 2.4.2. If a flag is missing in th
 **Default deny:** only the commands in "Safe for the agent" and "Reading secrets" run without asking. Everything
 else, including commands not listed here, needs explicit human confirmation.
 
-## Safe for the agent (no secret values)
+## Safe for the agent (no access to stored secrets)
 
 | Command | Purpose |
 |---|---|

@@ -38,15 +38,16 @@ somewhere for later re-login and to add it to its memory.
   destroys, moves, shares or changes access: `item delete`, `item trash`, `item untrash`, `item move`,
   `item share`, `item member`, `vault update`, `vault delete`, `vault share`, `vault member`, `vault transfer`,
   `invite accept|reject`, `ssh-agent`, `update`, and any `agent` or `personal-access-token` subcommand other
-  than `agent monitor` and `agent instructions`. **Default deny:** a `pass-cli` command not listed as safe in
-  `references/commands.md` needs confirmation too.
+  than `agent monitor` and `agent instructions`. **Default deny:** a `pass-cli` command not listed under "Safe for
+  the agent" or "Reading secrets" in `references/commands.md` needs confirmation too.
 - **Create or update items only when the user asked for that exact change.** Never put a secret value in a
   command line (`item update --field name=value` shows up in `ps`): ask the human to set it in the Proton Pass app.
 
 ## Session setup
 
 Run these steps in order before the first `pass-cli` command of a task. Replace `<agent-name>` with the agent's
-real name. Token sources and error messages: `references/session.md`.
+real name (it names both the session directory and the keychain entry). Token sources and error messages:
+`references/session.md`.
 
 ```bash
 # 1. CLI installed?
@@ -59,24 +60,26 @@ mkdir -p -m 700 "$D" && [ -d "$D" ] && [ ! -L "$D" ] && [ -O "$D" ] && chmod 700
   || { echo "unsafe session dir $D: stop and report" >&2; false; }
 
 # 3. Login helper: refuse without the isolated session dir (the default store may hold the human's own,
-#    full-account session); reuse a valid session; otherwise read the token from the keychain or the env.
+#    full-account session); drop the token from the environment first; reuse a valid session; otherwise
+#    read the token from the keychain, falling back to the value that was in the environment.
 pass_login() {
   if [ -z "${PROTON_PASS_SESSION_DIR:-}" ]; then
     echo "pass-cli: PROTON_PASS_SESSION_DIR not set: run step 2 first" >&2
     return 1
   fi
+  local svc="pass-cli-agent-<agent-name>" tok="" envtok="${PROTON_PASS_PERSONAL_ACCESS_TOKEN:-}"
+  unset PROTON_PASS_PERSONAL_ACCESS_TOKEN
   pass-cli info >/dev/null 2>&1 && return 0
-  local tok
-  tok="$(security find-generic-password -s pass-cli-agent -w 2>/dev/null)"
-  [ -n "$tok" ] || tok="$(secret-tool lookup service pass-cli-agent 2>/dev/null)"
-  [ -n "$tok" ] || tok="${PROTON_PASS_PERSONAL_ACCESS_TOKEN:-}"
+  tok="$(security find-generic-password -s "$svc" -w 2>/dev/null)"
+  [ -n "$tok" ] || tok="$(secret-tool lookup service "$svc" 2>/dev/null)"
+  [ -n "$tok" ] || tok="$envtok"
   if [ -z "$tok" ]; then
     echo "pass-cli: no session and no token in keychain or env: ask the human" >&2
     return 1
   fi
   PROTON_PASS_PERSONAL_ACCESS_TOKEN="$tok" pass-cli login
   local rc=$?
-  unset tok PROTON_PASS_PERSONAL_ACCESS_TOKEN
+  unset tok envtok
   return $rc
 }
 
@@ -91,8 +94,10 @@ pass-cli share list --output json
 - Never run a bare `pass-cli login`: without a token it falls back to web login and blocks waiting for a browser.
 - If your shell does not keep functions between commands, send the `pass_login` definition together with the
   command that calls it.
-- `pass_login` removes `PROTON_PASS_PERSONAL_ACCESS_TOKEN` from the shell after login so child processes do not
-  inherit it. If the token only exists in the environment, a later re-login needs the human again.
+- `pass_login` removes `PROTON_PASS_PERSONAL_ACCESS_TOKEN` from the **current shell** on every call, so later
+  child processes of that shell do not inherit it. A fresh shell started by the agent harness inherits it again
+  from the harness: there, run `pass_login` first, or start children with `env -u PROTON_PASS_PERSONAL_ACCESS_TOKEN`.
+  If the token only exists in the environment, a re-login after the shell lost it needs the human again.
 - If **both** `vault list` and `share list` are empty, the agent has no grants: report it, do not try to fix access
   yourself. An agent granted single items has an empty `vault list` and entries in
   `pass-cli share list --only-items true`.
@@ -161,10 +166,11 @@ Full command and flag reference for 2.4.2, with what is safe and what needs conf
 ## Quick reference
 
 ```bash
+# all of these assume PROTON_PASS_SESSION_DIR points to the agent's own directory ("Session setup", step 2)
 pass-cli --version
 pass-cli info
 pass_login                                   # defined in "Session setup"; never a bare `pass-cli login`
-pass-cli logout --force
+pass-cli logout --force                      # only with PROTON_PASS_SESSION_DIR set
 pass-cli vault list --output json
 pass-cli share list --output json
 pass-cli item list --vault-name "<Vault>" --output json

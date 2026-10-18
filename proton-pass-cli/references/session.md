@@ -19,15 +19,17 @@ read by `pass_login` (SKILL.md, "Session setup"), safest first:
 
 | Source | How the human stores it | Why |
 |---|---|---|
-| macOS Keychain | `security add-generic-password -U -s pass-cli-agent -a "$USER" -w` (prompts for the value) | Read only for the login command; never in the environment |
-| Linux Secret Service | `secret-tool store --label=pass-cli-agent service pass-cli-agent` (prompts for the value) | Same |
+| macOS Keychain | `security add-generic-password -U -s pass-cli-agent-<agent-name> -a "$USER" -w` (prompts for the value) | Read only for the login command; never in the environment |
+| Linux Secret Service | `secret-tool store --label=pass-cli-agent-<agent-name> service pass-cli-agent-<agent-name>` (prompts for the value) | Same |
 | Environment variable | `export PROTON_PASS_PERSONAL_ACCESS_TOKEN=...` in the shell that starts the agent | Last resort: every process the agent starts inherits it and can read it (`env`, `ps eww`, `/proc/<pid>/environ`) |
 
-- `-U` updates the keychain entry, so the same command works after `agent renew`.
+- One entry per agent (`pass-cli-agent-<agent-name>`, the same name as the session directory), so agents do not
+  overwrite each other's token. `-U` updates the entry, so the same command works after `agent renew`.
 - macOS may show a dialog asking to allow `security` to read the entry the first time. The human must click
   "Allow" (or "Always Allow"); until then the lookup returns nothing and `pass_login` asks for the human.
-- With the environment variable, `pass_login` unsets it after login so the agent's child processes do not inherit
-  it. A re-login after the 2-hour session then needs the human to export it again: prefer the keychain.
+- With the environment variable, `pass_login` unsets it in the current shell on every call so that shell's child
+  processes do not inherit it. Fresh shells started by the agent harness inherit it again, and a re-login after the
+  shell lost it needs the human to export it again: prefer the keychain.
 
 Do not use `pass-cli login --pat <TOKEN>`: the token would show up in the process list. Do not `echo` the token or
 the variable. If no source is available, stop and ask the human to set one up. Never ask for the token in the chat.
